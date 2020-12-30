@@ -3,7 +3,9 @@ videotest
 @simple-version
 @ipad-stroke-effect
 images
-js
+js/index.js
+js/index2.js
+js/index-add.js
 readme.txt
 index.html
 index2.html
