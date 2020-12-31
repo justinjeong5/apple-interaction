@@ -20,6 +20,10 @@
           in: { src: 0, dst: 1, range: { src: 0.1, dst: 0.2 } },
           out: { src: 1, dst: 0, range: { src: 0.25, dst: 0.3 } }
         },
+        messageItem0_translateY: {
+          in: { src: 20, dst: 0, range: { src: 0.1, dst: 0.2 } },
+          out: { src: 0, dst: -20, range: { src: 0.25, dst: 0.3 } }
+        },
       }
     },
     {
@@ -128,8 +132,10 @@
         const criteria = (scrollValues.messageItem0_opacity.out.range.src + scrollValues.messageItem0_opacity.in.range.dst) / 2;
         if (scrollRatio <= criteria) {
           objs.messageItem0.style.opacity = calcScrollValues(scrollValues.messageItem0_opacity.in);
+          objs.messageItem0.style.transform = `translateY(${calcScrollValues(scrollValues.messageItem0_translateY.in)}%)`;
         } else {
           objs.messageItem0.style.opacity = calcScrollValues(scrollValues.messageItem0_opacity.out);
+          objs.messageItem0.style.transform = `translateY(${calcScrollValues(scrollValues.messageItem0_translateY.out)}%)`;
         }
         break;
 
