@@ -10,20 +10,57 @@
       scrollHeight: 0,
       objs: {
         container: document.querySelector('#scroll-section-0'),
-        messageItem0: document.querySelector('#scroll-section-0 .main-message.item-0'),
-        messageItem1: document.querySelector('#scroll-section-0 .main-message.item-1'),
-        messageItem2: document.querySelector('#scroll-section-0 .main-message.item-2'),
-        messageItem3: document.querySelector('#scroll-section-0 .main-message.item-3')
+        messageItem: [
+          document.querySelector('#scroll-section-0 .main-message.item-0'),
+          document.querySelector('#scroll-section-0 .main-message.item-1'),
+          document.querySelector('#scroll-section-0 .main-message.item-2'),
+          document.querySelector('#scroll-section-0 .main-message.item-3')
+        ]
       },
       scrollValues: {
-        messageItem0_opacity: {
-          in: { src: 0, dst: 1, range: { src: 0.1, dst: 0.2 } },
-          out: { src: 1, dst: 0, range: { src: 0.25, dst: 0.3 } }
-        },
-        messageItem0_translateY: {
-          in: { src: 20, dst: 0, range: { src: 0.1, dst: 0.2 } },
-          out: { src: 0, dst: -20, range: { src: 0.25, dst: 0.3 } }
-        },
+        messageItem: [
+          {// 0
+            opacity: {
+              in: { src: 0, dst: 1, range: { src: 0.1, dst: 0.2 } },
+              out: { src: 1, dst: 0, range: { src: 0.25, dst: 0.3 } }
+            },
+            translateY: {
+              in: { src: 20, dst: 0, range: { src: 0.1, dst: 0.2 } },
+              out: { src: 0, dst: -20, range: { src: 0.25, dst: 0.3 } }
+            }
+          },
+          {// 1
+            opacity: {
+              in: { src: 0, dst: 1, range: { src: 0.3, dst: 0.4 } },
+              out: { src: 1, dst: 0, range: { src: 0.45, dst: 0.5 } }
+            },
+            translateY: {
+              in: { src: 20, dst: 0, range: { src: 0.3, dst: 0.4 } },
+              out: { src: 0, dst: -20, range: { src: 0.45, dst: 0.5 } }
+            }
+          },
+          {// 2
+            opacity: {
+              in: { src: 0, dst: 1, range: { src: 0.5, dst: 0.6 } },
+              out: { src: 1, dst: 0, range: { src: 0.65, dst: 0.7 } }
+            },
+            translateY: {
+              in: { src: 20, dst: 0, range: { src: 0.5, dst: 0.6 } },
+              out: { src: 0, dst: -20, range: { src: 0.65, dst: 0.7 } }
+            }
+          },
+          {// 3
+            opacity: {
+              in: { src: 0, dst: 1, range: { src: 0.7, dst: 0.8 } },
+              out: { src: 1, dst: 0, range: { src: 0.85, dst: 0.9 } }
+            },
+            translateY: {
+              in: { src: 20, dst: 0, range: { src: 0.7, dst: 0.8 } },
+              out: { src: 0, dst: -20, range: { src: 0.85, dst: 0.9 } }
+            }
+          }
+        ]
+
       }
     },
     {
@@ -130,16 +167,17 @@
     const scrollValues = sceneInfo[currentScene].scrollValues;
     const scrollHeight = sceneInfo[currentScene].scrollHeight;
     const scrollRatio = (window.pageYOffset - prevScrollHeight) / scrollHeight;
-
     switch (currentScene) {
       case 0:
-        const criteria = (scrollValues.messageItem0_opacity.out.range.src + scrollValues.messageItem0_opacity.in.range.dst) / 2;
-        if (scrollRatio <= criteria) {
-          objs.messageItem0.style.opacity = calcScrollValues(scrollValues.messageItem0_opacity.in);
-          objs.messageItem0.style.transform = `translateY(${calcScrollValues(scrollValues.messageItem0_translateY.in)}%)`;
-        } else {
-          objs.messageItem0.style.opacity = calcScrollValues(scrollValues.messageItem0_opacity.out);
-          objs.messageItem0.style.transform = `translateY(${calcScrollValues(scrollValues.messageItem0_translateY.out)}%)`;
+        for (let index = 0; index < sceneInfo.length; index++) {
+          const criteria = (scrollValues.messageItem[index].opacity.out.range.src + scrollValues.messageItem[index].opacity.in.range.dst) / 2;
+          if (scrollRatio <= criteria) {
+            objs.messageItem[index].style.opacity = calcScrollValues(scrollValues.messageItem[index].opacity.in);
+            objs.messageItem[index].style.transform = `translateY(${calcScrollValues(scrollValues.messageItem[index].translateY.in)}%)`;
+          } else {
+            objs.messageItem[index].style.opacity = calcScrollValues(scrollValues.messageItem[index].opacity.out);
+            objs.messageItem[index].style.transform = `translateY(${calcScrollValues(scrollValues.messageItem[index].translateY.out)}%)`;
+          }
         }
         break;
 
