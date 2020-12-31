@@ -98,35 +98,36 @@
         videoImages: [],
       },
       scrollValues: {
+
         messageItem: [
           {// 0
             opacity: {
-              in: { src: 0, dst: 1, range: { src: 0.25, dst: 0.3 } },
-              out: { src: 1, dst: 0, range: { src: 0.4, dst: 0.45 } }
+              in: { src: 0, dst: 1, range: { src: 0.15, dst: 0.2 } },
+              out: { src: 1, dst: 0, range: { src: 0.3, dst: 0.35 } }
             },
             translateY: {
-              in: { src: 20, dst: 0, range: { src: 0.15, dst: 0.2 } },
-              out: { src: 0, dst: -20, range: { src: 0.4, dst: 0.45 } }
+              in: { src: 20, dst: 0, range: { src: 0.05, dst: 0.1 } },
+              out: { src: 0, dst: -20, range: { src: 0.3, dst: 0.35 } }
             }
           },
           {// 1
             opacity: {
-              in: { src: 0, dst: 1, range: { src: 0.6, dst: 0.65 } },
-              out: { src: 1, dst: 0, range: { src: 0.68, dst: 0.73 } }
+              in: { src: 0, dst: 1, range: { src: 0.5, dst: 0.55 } },
+              out: { src: 1, dst: 0, range: { src: 0.58, dst: 0.63 } }
             },
             translateY: {
-              in: { src: 30, dst: 0, range: { src: 0.6, dst: 0.65 } },
-              out: { src: 0, dst: -20, range: { src: 0.68, dst: 0.73 } }
+              in: { src: 30, dst: 0, range: { src: 0.5, dst: 0.55 } },
+              out: { src: 0, dst: -20, range: { src: 0.58, dst: 0.63 } }
             }
           },
           {// 2
             opacity: {
-              in: { src: 0, dst: 1, range: { src: 0.87, dst: 0.92 } },
-              out: { src: 1, dst: 0, range: { src: 0.95, dst: 1 } }
+              in: { src: 0, dst: 1, range: { src: 0.77, dst: 0.82 } },
+              out: { src: 1, dst: 0, range: { src: 0.85, dst: 0.9 } }
             },
             translateY: {
-              in: { src: 30, dst: 0, range: { src: 0.87, dst: 0.92 } },
-              out: { src: 0, dst: -20, range: { src: 0.95, dst: 1 } }
+              in: { src: 30, dst: 0, range: { src: 0.77, dst: 0.82 } },
+              out: { src: 0, dst: -20, range: { src: 0.85, dst: 0.9 } }
             }
           }
         ],
@@ -148,7 +149,7 @@
           sequence: { src: 0, dst: 959 },
           opacity: {
             in: { src: 0, dst: 1, range: { src: 0, dst: 0.1 } },
-            out: { src: 1, dst: 0, range: { src: 0.9, dst: 1 } }
+            out: { src: 1, dst: 0, range: { src: 0.85, dst: 0.95 } }
           },
         }
       }
@@ -372,8 +373,8 @@
           // scrollValues.rectStartingY = objs.canvas.getBoundingClientRect().top
           scrollValues.rectStartingY = objs.canvas.offsetTop + (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2;
           // console.log(scrollValues.rectStartingY)
-          scrollValues.rectLeftX.range.src = (window.innerHeight / 3) / scrollHeight;
-          scrollValues.rectRightX.range.src = (window.innerHeight / 3) / scrollHeight;
+          scrollValues.rectLeftX.range.src = (window.innerHeight / 2) / scrollHeight;
+          scrollValues.rectRightX.range.src = (window.innerHeight / 2) / scrollHeight;
           scrollValues.rectLeftX.range.dst = scrollValues.rectStartingY / scrollHeight;
           scrollValues.rectRightX.range.dst = scrollValues.rectStartingY / scrollHeight;
         }
