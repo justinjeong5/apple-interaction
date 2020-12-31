@@ -92,7 +92,10 @@
           null,
           document.querySelector('#scroll-section-2 .item-1 .pin'),
           document.querySelector('#scroll-section-2 .item-0 .pin'),
-        ]
+        ],
+        canvas: document.querySelector('#video-canvas-2'),
+        context: document.querySelector('#video-canvas-2').getContext('2d'),
+        videoImages: [],
       },
       scrollValues: {
         messageItem: [
@@ -139,8 +142,15 @@
               in: { src: 0.5, dst: 1, range: { src: 0.87, dst: 0.92 } }
             }
           }
-        ]
-
+        ],
+        videoImageInfo: {
+          count: 960,
+          sequence: { src: 0, dst: 959 },
+          opacity: {
+            in: { src: 0, dst: 1, range: { src: 0, dst: 0.1 } },
+            out: { src: 1, dst: 0, range: { src: 0.9, dst: 1 } }
+          },
+        }
       }
     },
     {
@@ -177,6 +187,7 @@
 
     const heightRatio = window.innerHeight / 1080;
     sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
+    sceneInfo[2].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
   }
 
   const setCanvasLayout = () => {
@@ -187,6 +198,13 @@
       return imageElem;
     })
     // console.log(sceneInfo[0].objs.videoImages)
+    const SIZ2 = sceneInfo[2].scrollValues.videoImageInfo.count
+    sceneInfo[2].objs.videoImages = Array.from(Array(SIZ2)).map((value, index) => {
+      const imageElem = new Image();
+      imageElem.src = `/video/002/IMG_${7027 + index}.JPG`;
+      return imageElem;
+    })
+    // console.log(sceneInfo[2].objs.videoImages)
   }
   setCanvasLayout();
 
@@ -246,10 +264,12 @@
     const scrollValues = sceneInfo[currentScene].scrollValues;
     const scrollHeight = sceneInfo[currentScene].scrollHeight;
     const scrollRatio = (window.pageYOffset - prevScrollHeight) / scrollHeight;
+    let imageSequence;
+
     switch (currentScene) {
       case 0:
-        let sequence = Math.round(calcScrollValues(scrollValues.videoImageInfo.sequence));
-        objs.context.drawImage(objs.videoImages[sequence], 0, 0)
+        imageSequence = Math.round(calcScrollValues(scrollValues.videoImageInfo.sequence));
+        objs.context.drawImage(objs.videoImages[imageSequence], 0, 0)
         objs.canvas.style.opacity = calcScrollValues(scrollValues.videoImageInfo.opacity);
 
         for (let index = 0; index < scrollValues.messageItem.length; index++) {
@@ -269,6 +289,15 @@
         break;
 
       case 2:
+        imageSequence = Math.round(calcScrollValues(scrollValues.videoImageInfo.sequence));
+        objs.context.drawImage(objs.videoImages[imageSequence], 0, 0)
+        const criteria = (scrollValues.videoImageInfo.opacity.in.range.dst + scrollValues.videoImageInfo.opacity.out.range.src) / 2;
+        if (scrollRatio < criteria) {
+          objs.canvas.style.opacity = calcScrollValues(scrollValues.videoImageInfo.opacity.in);
+        } else {
+          objs.canvas.style.opacity = calcScrollValues(scrollValues.videoImageInfo.opacity.out);
+        }
+
         for (let index = 0; index < scrollValues.messageItem.length; index++) {
           const criteria = (scrollValues.messageItem[index].opacity.out.range.src + scrollValues.messageItem[index].opacity.in.range.dst) / 2;
           if (scrollRatio <= criteria) {
@@ -299,6 +328,7 @@
   window.addEventListener('load', () => {
     setLayout();
     sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0)
+    sceneInfo[2].objs.context.drawImage(sceneInfo[2].objs.videoImages[0], 0, 0)
   });
   window.addEventListener('scroll', () => {
     scrollLoop();
