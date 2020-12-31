@@ -15,7 +15,10 @@
           document.querySelector('#scroll-section-0 .main-message.item-1'),
           document.querySelector('#scroll-section-0 .main-message.item-2'),
           document.querySelector('#scroll-section-0 .main-message.item-3')
-        ]
+        ],
+        canvas: document.querySelector('#video-canvas-0'),
+        context: document.querySelector('#video-canvas-0').getContext('2d'),
+        videoImages: [],
       },
       scrollValues: {
         messageItem: [
@@ -59,8 +62,12 @@
               out: { src: 0, dst: -20, range: { src: 0.85, dst: 0.9 } }
             }
           }
-        ]
-
+        ],
+        videoImageInfo: {
+          count: 300,
+          sequence: { src: 0, dst: 299 },
+          opacity: { src: 1, dst: 0, range: { src: 0.9, dst: 1 } },
+        }
       }
     },
     {
@@ -167,7 +174,21 @@
       }
     })
     setCurrentSection()
+
+    const heightRatio = window.innerHeight / 1080;
+    sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
   }
+
+  const setCanvasLayout = () => {
+    const SIZ = sceneInfo[0].scrollValues.videoImageInfo.count
+    sceneInfo[0].objs.videoImages = Array.from(Array(SIZ)).map((value, index) => {
+      const imageElem = new Image();
+      imageElem.src = `/video/001/IMG_${6726 + index}.JPG`;
+      return imageElem;
+    })
+    // console.log(sceneInfo[0].objs.videoImages)
+  }
+  setCanvasLayout();
 
   const scrollLoop = () => {
     prevScrollHeight = sceneInfo.reduce((acc, value, index) => {
@@ -227,6 +248,10 @@
     const scrollRatio = (window.pageYOffset - prevScrollHeight) / scrollHeight;
     switch (currentScene) {
       case 0:
+        let sequence = Math.round(calcScrollValues(scrollValues.videoImageInfo.sequence));
+        objs.context.drawImage(objs.videoImages[sequence], 0, 0)
+        objs.canvas.style.opacity = calcScrollValues(scrollValues.videoImageInfo.opacity);
+
         for (let index = 0; index < scrollValues.messageItem.length; index++) {
           const criteria = (scrollValues.messageItem[index].opacity.out.range.src + scrollValues.messageItem[index].opacity.in.range.dst) / 2;
           if (scrollRatio <= criteria) {
@@ -271,7 +296,10 @@
   }
 
   window.addEventListener('resize', setLayout);
-  window.addEventListener('load', setLayout);
+  window.addEventListener('load', () => {
+    setLayout();
+    sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0)
+  });
   window.addEventListener('scroll', () => {
     scrollLoop();
     // console.log('currentScene: ', currentScene, ' prevScrollHeight: ', prevScrollHeight)
