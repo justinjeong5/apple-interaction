@@ -57,6 +57,7 @@ a {
   font-size: 0.8rem;
 }
 .scroll-section {
+  position: relative;
   padding-top: 50vh;
 }
 #scroll-section-0 h1 {
@@ -165,6 +166,11 @@ a {
 #show-scene-2 #scroll-section-2 .sticky-elem,
 #show-scene-3 #scroll-section-3 .sticky-elem {
   display: block;
+}
+#scroll-section-3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (min-width: 1024px) {

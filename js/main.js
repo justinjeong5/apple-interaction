@@ -158,7 +158,22 @@
       heightNum: 5,
       scrollHeight: 0,
       objs: {
-        container: document.querySelector('#scroll-section-3')
+        container: document.querySelector('#scroll-section-3'),
+        canvas: document.querySelector('.image-blend-canvas'),
+        context: document.querySelector('.image-blend-canvas').getContext('2d'),
+        images: []
+      },
+      scrollValues: {
+        imageInfo: {
+          count: 2,
+          imagePath: [
+            '/images/blend-image-1.jpg',
+            '/images/blend-image-2.jpg'
+          ],
+        },
+        rectStartingY: 0,
+        rectLeftX: { src: 0, dst: 0, range: { src: 0, dst: 0 } },
+        rectRightX: { src: 0, dst: 0, range: { src: 0, dst: 0 } },
       }
     },
   ];
@@ -205,6 +220,12 @@
       return imageElem;
     })
     // console.log(sceneInfo[2].objs.videoImages)
+    sceneInfo[3].objs.images = sceneInfo[3].scrollValues.imageInfo.imagePath.map((path) => {
+      const imageElem = new Image();
+      imageElem.src = path;
+      return imageElem;
+    })
+    // console.log(sceneInfo[3].objs.images)
   }
   setCanvasLayout();
 
@@ -312,10 +333,62 @@
               objs.pin[index].style.transform = `scaleY(${calcScrollValues(scrollValues.pin[index].scaleY)})`;
           }
         }
+        if (scrollRatio > 0.9) {
+          const objs = sceneInfo[3].objs;
+          const scrollValues = sceneInfo[3].scrollValues
+          const widthRatio = window.innerWidth / objs.canvas.width;
+          const heightRatio = window.innerHeight / objs.canvas.height;
+          let canvasScaleRatio;
+
+          widthRatio > heightRatio ? canvasScaleRatio = widthRatio : canvasScaleRatio = heightRatio;
+          objs.canvas.style.transform = `scale(${canvasScaleRatio})`
+          objs.context.fillStyle = 'white';
+          objs.context.drawImage(objs.images[0], 0, 0);
+
+          const revisedInnerWidth = document.body.offsetWidth / canvasScaleRatio;
+          const whiteRectWidth = revisedInnerWidth * 0.15
+          scrollValues.rectLeftX.src = (objs.canvas.width - revisedInnerWidth) / 2;
+          scrollValues.rectLeftX.dst = scrollValues.rectLeftX.src - whiteRectWidth;
+          scrollValues.rectRightX.src = scrollValues.rectLeftX.src + revisedInnerWidth - whiteRectWidth;
+          scrollValues.rectRightX.dst = scrollValues.rectRightX.src + whiteRectWidth;
+
+          objs.context.fillRect(scrollValues.rectLeftX.src, 0, parseInt(whiteRectWidth), objs.canvas.height);
+          objs.context.fillRect(scrollValues.rectRightX.src, 0, parseInt(whiteRectWidth), objs.canvas.height);
+        }
         break;
 
       case 3:
-        // Todo
+        // to fit tightly for width, height
+        const widthRatio = window.innerWidth / objs.canvas.width;
+        const heightRatio = window.innerHeight / objs.canvas.height;
+        let canvasScaleRatio;
+        widthRatio > heightRatio ? canvasScaleRatio = widthRatio : canvasScaleRatio = heightRatio;
+        // console.log(widthRatio, heightRatio, canvasScaleRatio)
+        objs.canvas.style.transform = `scale(${canvasScaleRatio})`
+        objs.context.fillStyle = 'white';
+        objs.context.drawImage(objs.images[0], 0, 0);
+
+        if (!scrollValues.rectStartingY) {
+          // scrollValues.rectStartingY = objs.canvas.getBoundingClientRect().top
+          scrollValues.rectStartingY = objs.canvas.offsetTop + (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2;
+          // console.log(scrollValues.rectStartingY)
+          scrollValues.rectLeftX.range.src = (window.innerHeight / 3) / scrollHeight;
+          scrollValues.rectRightX.range.src = (window.innerHeight / 3) / scrollHeight;
+          scrollValues.rectLeftX.range.dst = scrollValues.rectStartingY / scrollHeight;
+          scrollValues.rectRightX.range.dst = scrollValues.rectStartingY / scrollHeight;
+        }
+
+        const revisedInnerWidth = document.body.offsetWidth / canvasScaleRatio;
+        // console.log(revisedInnerWidth)
+        const whiteRectWidth = revisedInnerWidth * 0.15
+        scrollValues.rectLeftX.src = (objs.canvas.width - revisedInnerWidth) / 2;
+        scrollValues.rectLeftX.dst = scrollValues.rectLeftX.src - whiteRectWidth;
+        scrollValues.rectRightX.src = scrollValues.rectLeftX.src + revisedInnerWidth - whiteRectWidth;
+        scrollValues.rectRightX.dst = scrollValues.rectRightX.src + whiteRectWidth;
+        // console.log(scrollValues.rectLeftX, scrollValues.rectRightX)
+
+        objs.context.fillRect(calcScrollValues(scrollValues.rectLeftX), 0, parseInt(whiteRectWidth), objs.canvas.height);
+        objs.context.fillRect(calcScrollValues(scrollValues.rectRightX), 0, parseInt(whiteRectWidth), objs.canvas.height);
         break;
 
       default:
