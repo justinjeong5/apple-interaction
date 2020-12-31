@@ -28,7 +28,6 @@
     },
     {
       type: 'normal',
-      heightNum: 5,
       scrollHeight: 0,
       objs: {
         container: document.querySelector('#scroll-section-1')
@@ -54,8 +53,13 @@
 
   const setLayout = () => {
     sceneInfo = sceneInfo.map((value) => {
-      value.scrollHeight = value.heightNum * window.innerHeight;
+      if (value.type === 'sticky') {
+        value.scrollHeight = value.heightNum * window.innerHeight;
+      } else {
+        value.scrollHeight = value.objs.container.offsetHeight;
+      }
       value.objs.container.style.height = `${value.scrollHeight}px`;
+
       return value;
     })
 
