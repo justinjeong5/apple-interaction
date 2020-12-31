@@ -111,6 +111,7 @@ a {
   margin-right: 0.2em;
 }
 .desc-message {
+  opacity: 0;
   font-weight: bold;
   width: 50%;
 }
