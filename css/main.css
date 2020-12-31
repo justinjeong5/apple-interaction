@@ -85,6 +85,14 @@ a {
 #scroll-section-2 .main-message {
   font-size: 3.5rem;
 }
+#scroll-section-2 .item-1 {
+  top: 10%;
+  left: 40%;
+}
+#scroll-section-2 .item-2 {
+  top: 15%;
+  left: 45%;
+}
 .description {
   max-width: 1000px;
   margin: 0 auto;
@@ -160,6 +168,13 @@ a {
   }
   #scroll-section-2 .main-message {
     font-size: 6vw;
+  }
+  #scroll-section-2 .item-1 {
+    top: 20%;
+    left: 53%;
+  }
+  #scroll-section-2 .item-2 {
+    left: 55%;
   }
   .main-message small {
     font-size: 1.5vw;

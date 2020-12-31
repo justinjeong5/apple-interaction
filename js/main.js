@@ -75,7 +75,65 @@
       heightNum: 5,
       scrollHeight: 0,
       objs: {
-        container: document.querySelector('#scroll-section-2')
+        container: document.querySelector('#scroll-section-2'),
+        messageItem: [
+          document.querySelector('#scroll-section-2 .item-0'),
+          document.querySelector('#scroll-section-2 .item-1'),
+          document.querySelector('#scroll-section-2 .item-2'),
+        ],
+        pin: [
+          null,
+          document.querySelector('#scroll-section-2 .item-1 .pin'),
+          document.querySelector('#scroll-section-2 .item-0 .pin'),
+        ]
+      },
+      scrollValues: {
+        messageItem: [
+          {// 0
+            opacity: {
+              in: { src: 0, dst: 1, range: { src: 0.25, dst: 0.3 } },
+              out: { src: 1, dst: 0, range: { src: 0.4, dst: 0.45 } }
+            },
+            translateY: {
+              in: { src: 20, dst: 0, range: { src: 0.15, dst: 0.2 } },
+              out: { src: 0, dst: -20, range: { src: 0.4, dst: 0.45 } }
+            }
+          },
+          {// 1
+            opacity: {
+              in: { src: 0, dst: 1, range: { src: 0.6, dst: 0.65 } },
+              out: { src: 1, dst: 0, range: { src: 0.68, dst: 0.73 } }
+            },
+            translateY: {
+              in: { src: 30, dst: 0, range: { src: 0.6, dst: 0.65 } },
+              out: { src: 0, dst: -20, range: { src: 0.68, dst: 0.73 } }
+            }
+          },
+          {// 2
+            opacity: {
+              in: { src: 0, dst: 1, range: { src: 0.87, dst: 0.92 } },
+              out: { src: 1, dst: 0, range: { src: 0.95, dst: 1 } }
+            },
+            translateY: {
+              in: { src: 30, dst: 0, range: { src: 0.87, dst: 0.92 } },
+              out: { src: 0, dst: -20, range: { src: 0.95, dst: 1 } }
+            }
+          }
+        ],
+        pin: [
+          null,
+          {
+            scaleY: {
+              in: { src: 0.5, dst: 1, range: { src: 0.6, dst: 0.65 } }
+            }
+          },
+          {
+            scaleY: {
+              in: { src: 0.5, dst: 1, range: { src: 0.87, dst: 0.92 } }
+            }
+          }
+        ]
+
       }
     },
     {
@@ -169,24 +227,37 @@
     const scrollRatio = (window.pageYOffset - prevScrollHeight) / scrollHeight;
     switch (currentScene) {
       case 0:
-        for (let index = 0; index < sceneInfo.length; index++) {
+        for (let index = 0; index < scrollValues.messageItem.length; index++) {
           const criteria = (scrollValues.messageItem[index].opacity.out.range.src + scrollValues.messageItem[index].opacity.in.range.dst) / 2;
           if (scrollRatio <= criteria) {
             objs.messageItem[index].style.opacity = calcScrollValues(scrollValues.messageItem[index].opacity.in);
-            objs.messageItem[index].style.transform = `translateY(${calcScrollValues(scrollValues.messageItem[index].translateY.in)}%)`;
+            objs.messageItem[index].style.transform = `translate3d(0, ${calcScrollValues(scrollValues.messageItem[index].translateY.in)}%, 0)`;
           } else {
             objs.messageItem[index].style.opacity = calcScrollValues(scrollValues.messageItem[index].opacity.out);
-            objs.messageItem[index].style.transform = `translateY(${calcScrollValues(scrollValues.messageItem[index].translateY.out)}%)`;
+            objs.messageItem[index].style.transform = `translate3d(0, ${calcScrollValues(scrollValues.messageItem[index].translateY.out)}%, 0)`;
           }
         }
         break;
 
       case 1:
-        // Todo
+        //  Do Nothing Here Since it is Normal Section.
         break;
 
       case 2:
-        // Todo
+        for (let index = 0; index < scrollValues.messageItem.length; index++) {
+          const criteria = (scrollValues.messageItem[index].opacity.out.range.src + scrollValues.messageItem[index].opacity.in.range.dst) / 2;
+          if (scrollRatio <= criteria) {
+            objs.messageItem[index].style.opacity = calcScrollValues(scrollValues.messageItem[index].opacity.in);
+            objs.messageItem[index].style.transform = `translate3d(0, ${calcScrollValues(scrollValues.messageItem[index].translateY.in)}%, 0)`;
+            if (objs.pin[index])
+              objs.pin[index].style.transform = `scaleY(${calcScrollValues(scrollValues.pin[index].scaleY)})`;
+          } else {
+            objs.messageItem[index].style.opacity = calcScrollValues(scrollValues.messageItem[index].opacity.out);
+            objs.messageItem[index].style.transform = `translate3d(0, ${calcScrollValues(scrollValues.messageItem[index].translateY.out)}%, 0)`;
+            if (objs.pin[index])
+              objs.pin[index].style.transform = `scaleY(${calcScrollValues(scrollValues.pin[index].scaleY)})`;
+          }
+        }
         break;
 
       case 3:
